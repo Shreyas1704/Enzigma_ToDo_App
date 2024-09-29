@@ -1,0 +1,76 @@
+<div class="overlay">
+  <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)" class="user-form">
+    <!-- Close icon -->
+    <span class="close" (click)="cancelForm()" style="cursor:pointer;">&times;</span>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="name">
+          <span class="required-star">*</span>Assigned To
+        </label>
+        <select name="name" [ngModel]="user?.name" required #name="ngModel" class="form-control">
+          <option *ngFor="let u of users" [value]="u">{{ u }}</option>
+        </select>
+        <!-- Validation message for Assigned To -->
+        <div *ngIf="name.invalid && name.touched" class="error">
+          Assigned To is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="status">
+          <span class="required-star">*</span>Status
+        </label>
+        <select name="status" [ngModel]="user?.status" required #status="ngModel" class="form-control">
+          <option value="Not Started">Not Started</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Completed">Completed</option>
+        </select>
+        <!-- Validation message for Status -->
+        <div *ngIf="status.invalid && status.touched" class="error">
+          Status is required
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="dueDate">
+          <span class="required-star">*</span>Due Date
+        </label>
+        <input type="date" name="dueDate" [ngModel]="user?.dueDate" required #dueDate="ngModel" class="form-control" />
+        <!-- Validation message for Due Date -->
+        <div *ngIf="dueDate.invalid && dueDate.touched" class="error">
+          Due Date is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="priority">
+          <span class="required-star">*</span>Priority
+        </label>
+        <select name="priority" [ngModel]="user?.priority" required #priority="ngModel" class="form-control">
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+        <!-- Validation message for Priority -->
+        <div *ngIf="priority.invalid && priority.touched" class="error">
+          Priority is required
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group full-width">
+        <label for="description">Description</label>
+        <textarea name="description" [ngModel]="user?.description" rows="4" class="form-control"></textarea>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="userForm.invalid">{{ user ? 'Update User' : 'Add User' }}</button>
+      <button type="button" (click)="cancelForm()">Cancel</button>
+    </div>
+  </form>
+</div>

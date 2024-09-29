@@ -1,0 +1,85 @@
+<div class="container">
+  <div class="button-container">
+    <h1 class="page-title">📝 Tasks</h1>
+    <div class="button-group">
+      <button (click)="onNewTask()">New Task</button>
+      <button (click)="onRefresh()">Refresh</button>
+    </div>
+  </div>
+  
+  <div class="search-container">
+    <div class="search-wrapper">
+      <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Search" />
+      <span class="search-icon">🔍</span>
+    </div>
+  </div>
+  
+  <div *ngIf="isFormVisible" class="overlay"></div> <!-- Backdrop for the overlay -->
+
+  <app-user-form 
+  *ngIf="isFormVisible" 
+  [user]="editingUser" 
+  (submitUser)="editingUser ? saveUser($event) : onNewTask($event)" 
+  (cancel)="onCancel()"></app-user-form>
+
+  <!--<div *ngIf="isConfirmDialogVisible">
+    <app-confirmation-dialog (confirm)="confirmDelete($event)"></app-confirmation-dialog>
+  </div>-->
+
+  <app-confirmation-dialog 
+    *ngIf="showConfirmationDialog" 
+    (confirm)="confirmDelete($event)">
+  </app-confirmation-dialog>
+
+  <div class="record-count" style="text-align: left; margin-bottom: 10px;">
+    {{ filteredUsers.length }} records
+  </div>
+
+  <hr />
+  
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Assigned To</th>
+        <th>Status</th>
+        <th>Due Date</th>
+        <th>Priority</th>
+        <th>Comments</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of paginatedUsers">
+        <td>
+          <input type="checkbox" (click)="toggleCompletion(user)" [checked]="user.completed" />
+        </td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.status }}</td>
+        <td>{{ user.dueDate }}</td>
+        <td>{{ user.priority }}</td>
+        <td>{{ user.description }}</td>
+        <td>
+          <div class="dropdown">
+            <button class="dropdown-button">▼</button>
+            <div class="dropdown-content">
+              <button (click)="onEditUser(user)">Edit</button>
+              <button (click)="onDeleteUser(user.id)">Delete</button>
+            </div>
+          </div>
+        </td>
+        
+      </tr>
+    </tbody>
+  </table>
+
+  <hr />
+
+  <div class="pagination">
+    <button (click)="firstPage()" [disabled]="currentPage === 1">🡹 First</button>
+    <button (click)="prevPage()" [disabled]="currentPage === 1"> < Prev</button>
+    <button>{{ currentPage }} <!--of {{ totalPages }}--></button>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages"> > Next</button>
+    <button (click)="lastPage()" [disabled]="currentPage === totalPages">🡻 Last</button>
+  </div>
+</div>
